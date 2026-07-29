@@ -4,13 +4,17 @@ dist/
 .vite/
 
 # Python / backend
-.venv/
 venv/
+.venv/
 __pycache__/
 *.pyc
 
 # Environment secrets
 .env
+
+# Test/dev scratch files
+complaint-backend/test_*.py
+complaint-backend/sample-complaints/
 
 # OS/editor
 .DS_Store
