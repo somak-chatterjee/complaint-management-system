@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from enum import Enum
 from datetime import datetime
@@ -93,6 +93,16 @@ class ComplaintExtraction(BaseModel):
     complaintDescription: ExtractedField = ExtractedField()
     initialSeverity: Optional[Severity] = None
     priority: Optional[Priority] = None
+
+    @field_validator("initialSeverity", "priority", mode="before")
+    @classmethod
+    def unwrap_if_object(cls, v):
+        """Tolerate the model occasionally wrapping these in the
+        {value, confidence} shape used for text fields, instead of
+        the plain string the schema actually expects."""
+        if isinstance(v, dict) and "value" in v:
+            return v["value"]
+        return v
 
 
 class ExtractionRequest(BaseModel):

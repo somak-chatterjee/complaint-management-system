@@ -19,6 +19,7 @@ EXTRACTION_PROMPT_TEMPLATE = """You are a pharmaceutical quality assurance assis
 Field notes:
 - complaintSource: the CHANNEL the complaint came through (e.g. "Customer Email", "Phone Call", "Distributor Report", "Physician Report"), NOT the person's name.
 - customerName: the name of the person or organization who filed the complaint.
+- initialSeverity and priority must be plain string values only (for example "Minor" or "Medium") — do NOT wrap them in an object like the other fields.
 
 Schema:
 {{
