@@ -1,22 +1,23 @@
 import { useDispatch } from 'react-redux';
 import { setFieldFromUser } from '../features/complaintForm/complaintFormSlice';
 
-const baseInputStyle = (field) => ({
+const baseInputStyle = (field, needsReview) => ({
   width: '100%',
   padding: '10px 12px',
   borderRadius: '6px',
-  border: field.source === 'ai' ? '1px solid #4f8ef7' : '1px solid #d9dbe0',
-  background: field.source === 'ai' ? '#f0f6ff' : '#fafafa',
+  border: needsReview
+    ? '1px solid #e0a030'
+    : field.source === 'ai' ? '1px solid #4f8ef7' : '1px solid #d9dbe0',
+  background: needsReview
+    ? '#fff8ec'
+    : field.source === 'ai' ? '#f0f6ff' : '#fafafa',
   fontSize: '14px',
   fontFamily: 'inherit',
 });
 
-export default function FormField({ name, label, field, type = 'text', options = [] }) {
+export default function FormField({ name, label, field, type = 'text', options = [], needsReview = false }) {
   const dispatch = useDispatch();
-
-  const handleChange = (e) => {
-    dispatch(setFieldFromUser({ field: name, value: e.target.value }));
-  };
+  const handleChange = (e) => dispatch(setFieldFromUser({ field: name, value: e.target.value }));
 
   const renderInput = () => {
     if (type === 'textarea') {

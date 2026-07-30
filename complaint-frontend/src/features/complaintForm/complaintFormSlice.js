@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const emptyField = () => ({ value: '', source: 'manual', confidence: null });
+const emptyField = () => ({ value: '', source: 'manual', confidence: null, needsReview: false });
 
 const initialState = {
   status: 'idle', // idle | awaiting_extraction | ready
@@ -26,12 +26,12 @@ const complaintFormSlice = createSlice({
   initialState,
   reducers: {
     setFieldFromAI(state, action) {
-      const { field, value, confidence } = action.payload;
-      state.fields[field] = { value, source: 'ai', confidence };
+      const { field, value, confidence, needsReview } = action.payload;
+      state.fields[field] = { value, source: 'ai', confidence, needsReview: needsReview ?? false };
     },
     setFieldFromUser(state, action) {
       const { field, value } = action.payload;
-      state.fields[field] = { value, source: 'manual', confidence: null };
+      state.fields[field] = { value, source: 'manual', confidence: null, needsReview: false };
     },
     resetForm() {
       return initialState;

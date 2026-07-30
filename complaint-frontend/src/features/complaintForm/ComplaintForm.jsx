@@ -20,15 +20,21 @@ export default function ComplaintForm() {
         <FormField name="productName" label="Product name" field={fields.productName} />
         <FormField name="productStrength" label="Product strength/grade" field={fields.productStrength} />
         <FormField name="batchNumber" label="Batch/lot number" field={fields.batchNumber} />
-        <FormField name="manufacturingDate" label="Manufacturing date" field={fields.manufacturingDate} type="date" />
-        <FormField name="expiryDate" label="Expiry date" field={fields.expiryDate} type="date" />
+        <FormField name="manufacturingDate" label="Manufacturing date" field={fields.manufacturingDate} type="date" needsReview={fields.manufacturingDate.needsReview} />
+        <FormField name="expiryDate" label="Expiry date" field={fields.expiryDate} type="date" needsReview={fields.expiryDate.needsReview} />
         <FormField name="quantityAffected" label="Quantity affected" field={fields.quantityAffected} />
       </div>
 
       <h4 style={{ fontSize: '13px', color: '#999', marginBottom: '12px' }}>3. Complaint details</h4>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
         <FormField name="complaintType" label="Complaint type" field={fields.complaintType} />
-        <FormField name="complaintDate" label="Complaint date" field={fields.complaintDate} type="date" />
+        <FormField
+          name="complaintDate"
+          label="Complaint date"
+          field={fields.complaintDate}
+          type="date"
+          needsReview={fields.complaintDate.needsReview}
+        />
       </div>
       <div style={{ marginBottom: '24px' }}>
         <FormField name="complaintDescription" label="Detailed complaint description" field={fields.complaintDescription} type="textarea" />
