@@ -110,6 +110,11 @@ class ExtractionRequest(BaseModel):
     text: str = Field(..., min_length=1)
 
 
+class WSExtractionRequest(BaseModel):
+    """What the frontend sends once it opens the WebSocket."""
+    raw_text: str = Field(..., min_length=1)
+
+
 class ExtractionProgressMessage(BaseModel):
     """
     Shape of each message sent over the WebSocket during extraction.
