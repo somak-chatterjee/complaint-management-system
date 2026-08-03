@@ -47,15 +47,7 @@ function runExtraction(dispatch, rawText) {
     if (message.status === 'progress') {
       dispatch(progressUpdated(message.progress));
     } else if (message.status === 'complete') {
-      console.log('Full extraction result:', message.result);
-
-      // TEMP: force a needs_review date case to see how the UI actually handles it
-      const testResult = {
-        ...message.result,
-        complaintDate: { value: 'early spring', confidence: 0.5, needs_review: true },
-      };
-      dispatchExtractionResult(dispatch, testResult);
-
+      dispatchExtractionResult(dispatch, message.result);
       dispatch(extractionFinished());
     } else if (message.status === 'error') {
       dispatch(messageAdded({ role: 'assistant', text: `Extraction failed: ${message.error}` }));

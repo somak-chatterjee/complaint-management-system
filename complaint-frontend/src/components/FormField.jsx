@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { setFieldFromUser } from '../features/complaintForm/complaintFormSlice';
 
-const baseInputStyle = (field, needsReview) => ({
+const baseInputStyle = (field, needsReview, type = 'text') => ({
   width: '100%',
   padding: '10px 12px',
   borderRadius: '6px',
@@ -13,6 +13,8 @@ const baseInputStyle = (field, needsReview) => ({
     : field.source === 'ai' ? '#f0f6ff' : '#fafafa',
   fontSize: '14px',
   fontFamily: 'inherit',
+  ...(type === 'textarea' && { resize: 'vertical' }),
+  ...(type === 'select' && { color: field.value ? '#1a1a1a' : '#8a8a8a' }),
 });
 
 export default function FormField({ name, label, field, type = 'text', options = [], needsReview = false }) {
@@ -20,6 +22,18 @@ export default function FormField({ name, label, field, type = 'text', options =
   const handleChange = (e) => dispatch(setFieldFromUser({ field: name, value: e.target.value }));
 
   const renderInput = () => {
+    if (type === 'date' && needsReview) {
+      return (
+        <input
+          type="text"
+          value={field.value || ''}
+          placeholder="Awaiting AI extraction..."
+          onChange={handleChange}
+          style={baseInputStyle(field, needsReview)}
+        />
+      );
+    }
+
     if (type === 'textarea') {
       return (
         <textarea
@@ -27,7 +41,7 @@ export default function FormField({ name, label, field, type = 'text', options =
           placeholder="Awaiting AI extraction..."
           onChange={handleChange}
           rows={4}
-          style={{ ...baseInputStyle(field), resize: 'vertical' }}
+          style={{ ...baseInputStyle(field, needsReview), resize: 'vertical' }}
         />
       );
     }
@@ -37,7 +51,7 @@ export default function FormField({ name, label, field, type = 'text', options =
         <select
           value={field.value}
           onChange={handleChange}
-          style={{ ...baseInputStyle(field), color: field.value ? '#1a1a1a' : '#8a8a8a' }}
+          style={{ ...baseInputStyle(field, needsReview), color: field.value ? '#1a1a1a' : '#8a8a8a' }}
         >
           <option value="" disabled>
             Awaiting AI extraction...
@@ -58,7 +72,7 @@ export default function FormField({ name, label, field, type = 'text', options =
         value={field.value}
         placeholder="Awaiting AI extraction..."
         onChange={handleChange}
-        style={baseInputStyle(field)}
+        style={baseInputStyle(field, needsReview)}
       />
     );
   };
@@ -69,7 +83,12 @@ export default function FormField({ name, label, field, type = 'text', options =
         {label}
       </label>
       {renderInput()}
-      {field.source === 'ai' && field.confidence !== null && (
+      {needsReview && (
+        <span style={{ fontSize: '11px', color: '#c07a00' }}>
+          ⚠ AI could not confirm exact date — please verify
+        </span>
+      )}
+      {!needsReview && field.source === 'ai' && field.confidence !== null && (
         <span style={{ fontSize: '11px', color: '#4f8ef7' }}>
           AI extracted · {Math.round(field.confidence * 100)}% confidence
         </span>
