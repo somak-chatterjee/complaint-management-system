@@ -146,3 +146,10 @@ class ComplaintRecord(BaseModel):
     initialSeverity: Optional[Severity] = None
     priority: Optional[Priority] = None
     status: str = "Pending Triage"
+
+
+class ComplaintResponse(ComplaintRecord):
+    """What gets returned after a complaint is saved or fetched."""
+    id: int
+    created_at: datetime
+    updated_at: datetime

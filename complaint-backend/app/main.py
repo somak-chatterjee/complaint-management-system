@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.routes import extraction
+from app.api.routes import extraction, complaints
 
 app = FastAPI(title="Complaint Management API")
 
@@ -14,6 +14,7 @@ app.add_middleware(
 )
 
 app.include_router(extraction.router)
+app.include_router(complaints.router)
 
 @app.get("/health")
 def health_check():
