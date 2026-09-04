@@ -10,8 +10,8 @@ from app.models.schemas import ComplaintExtraction
 
 client = Groq(api_key=settings.groq_api_key)
 
-FAST_MODEL = "llama-3.1-8b-instant"
-POWERFUL_MODEL = "llama-3.3-70b-versatile"
+FAST_MODEL = "openai/gpt-oss-20b"
+POWERFUL_MODEL = "openai/gpt-oss-120b"
 CONFIDENCE_ESCALATION_THRESHOLD = 0.6
 
 EXTRACTION_PROMPT_TEMPLATE = """You are a pharmaceutical quality assurance assistant. Extract complaint details from the text below into STRICT JSON matching this schema exactly. Respond with ONLY the JSON object — no preamble, no markdown fences, no explanation.
