@@ -19,4 +19,4 @@ Built as a full-stack project covering document parsing, LLM-based structured ex
 **Note on model choice:** the original spec called for `gemma2-9b-it`, which Groq deprecated on August 8, 2025 in favor of `llama-3.1-8b-instant`. Groq subsequently deprecated `llama-3.1-8b-instant` and `llama-3.3-70b-versatile` as well (announced June 17, 2026, shut down August 16, 2026), migrating to `openai/gpt-oss-20b` and `openai/gpt-oss-120b` respectively — the models currently used in this project.
 
 ## Demo
-![Alt Text](./CMS_demo.gif)
+![Demo](./CMS_demo.gif)
