@@ -56,13 +56,3 @@ Built as a full-stack project covering document parsing, LLM-based structured ex
 5. Tag the release on `main` (for example `v1.1`).
 
 Pushing to `main` deploys. Other branches never do.
-
-## What changed
-Nothing. This is the first version.
-
-## How it was tested
-- [ ] Ran locally against a local database
-- [ ] Extraction, save and (if touched) chat still work
-- [ ] Database migrations are additive (nothing dropped or renamed)
-- [ ] New environment variables are documented and set on Render
-- [ ] README updated if behavior or setup changed
