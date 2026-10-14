@@ -70,7 +70,7 @@ export function useExtractionSocket() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('${API_BASE}/extraction/upload', {
+      const response = await fetch(`${API_BASE}/extraction/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -82,6 +82,7 @@ export function useExtractionSocket() {
       const data = await response.json();
       runExtraction(dispatch, data.raw_text);
     } catch (e) {
+      console.error('Upload failed:', e);
       dispatch(messageAdded({ role: 'assistant', text: 'Could not reach the backend to upload the file.' }));
     }
   };
