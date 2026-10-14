@@ -20,3 +20,49 @@ Built as a full-stack project covering document parsing, LLM-based structured ex
 
 ## Demo
 ![Demo](./CMS_demo.gif)
+
+## Release status
+
+**Current release: v1.0 (prototype)**, tagged `v1.0`.
+
+### What v1.0 includes
+
+- **Document intake**: upload PDF, DOCX, TXT or EML files (up to 10 MB), or paste complaint text
+- **AI extraction**: a LangGraph agent fills 13 form fields. A fast model (`openai/gpt-oss-20b`) runs first and escalates to a stronger one (`openai/gpt-oss-120b`) when its average confidence is at or below 0.65
+- **Confidence-aware form**: each AI-filled field shows a confidence badge and is visually distinct from manual entry
+- **Ambiguous dates flagged, not guessed**: vague dates such as "early spring" are kept as text with a review warning
+- **Live progress**: extraction progress streams to the UI over a WebSocket
+- **Persistence**: reviewed complaints are saved to PostgreSQL and can be read back through the API
+- **Deployed**: frontend, backend and database run on Render's free tier
+
+### Not in v1.0
+
+- **The AI assistant chat box is a placeholder.** It accepts input but does not reply. Planned for v1.1.
+- No authentication, no complaint list view in the UI, and no editing after save (see Known limitations)
+- No automated test suite
+
+## Branching and release workflow
+
+| Branch | Purpose |
+|---|---|
+| `main` | Production. Render deploys from this branch, so it should always work. |
+| `develop` | Integration branch. Finished features are merged here and tested together. |
+| `feature/*` | One branch per change, created from `develop`. |
+
+1. Create a feature branch from `develop`.
+2. Build and test it locally.
+3. Merge it into `develop` and test again.
+4. Open a pull request from `develop` into `main`, review the full diff, and merge.
+5. Tag the release on `main` (for example `v1.1`).
+
+Pushing to `main` deploys. Other branches never do.
+
+## What changed
+Nothing. This is the first version.
+
+## How it was tested
+- [ ] Ran locally against a local database
+- [ ] Extraction, save and (if touched) chat still work
+- [ ] Database migrations are additive (nothing dropped or renamed)
+- [ ] New environment variables are documented and set on Render
+- [ ] README updated if behavior or setup changed
