@@ -2,7 +2,8 @@ import { useDispatch } from 'react-redux';
 import { progressUpdated, extractionFinished, messageAdded } from './aiAssistantSlice';
 import { setFieldFromAI } from '../complaintForm/complaintFormSlice';
 
-const WS_URL = 'ws://localhost:8000/extraction/ws';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const WS_URL = API_BASE.replace(/^http/, 'ws') + '/extraction/ws';
 
 // Maps backend field keys to Redux dispatch calls. Text fields carry
 // {value, confidence}; severity/priority are plain strings.
@@ -69,7 +70,7 @@ export function useExtractionSocket() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/extraction/upload', {
+      const response = await fetch('${API_BASE}/extraction/upload', {
         method: 'POST',
         body: formData,
       });

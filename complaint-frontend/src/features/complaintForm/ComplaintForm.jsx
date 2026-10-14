@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormField from '../../components/FormField';
 import { resetForm } from './complaintFormSlice';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 export default function ComplaintForm() {
   const dispatch = useDispatch();
