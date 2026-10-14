@@ -20,3 +20,4 @@ complaint-backend/sample-complaints/
 .DS_Store
 .vscode/
 
+render.yaml
