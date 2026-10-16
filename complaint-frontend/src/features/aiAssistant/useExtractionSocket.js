@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { progressUpdated, extractionFinished, messageAdded } from './aiAssistantSlice';
+import { progressUpdated, extractionFinished, messageAdded, sourceTextSet } from './aiAssistantSlice';
 import { setFieldFromAI } from '../complaintForm/complaintFormSlice';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -35,6 +35,7 @@ function dispatchExtractionResult(dispatch, result) {
 }
 
 function runExtraction(dispatch, rawText) {
+  dispatch(sourceTextSet(rawText));
   const socket = new WebSocket(WS_URL);
 
   socket.onopen = () => {
