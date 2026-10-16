@@ -14,7 +14,7 @@ Everything in v1.x is a prototype.
 
 To release: update this file on `development`, merge `development` into `main` through a pull request, then tag the release on `main` and fill in its date below.
 
-## v1.1 (YYYY-MM-DD)
+## v1.1 (2026-10-14)
 
 ### Added
 - AI assistant chat: `POST /chat` answers questions about the loaded complaint using the original text and the current form values, quotes the supporting wording, and returns a fixed reply when no complaint is loaded
