@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from typing import Optional
 from app.core.config import settings
-from app.api.routes import extraction, complaints
+from app.api.routes import extraction, complaints, chat
 
 app = FastAPI(title="Complaint Management API")
 
@@ -15,6 +17,7 @@ app.add_middleware(
 
 app.include_router(extraction.router)
 app.include_router(complaints.router)
+app.include_router(chat.router)
 
 @app.get("/health")
 def health_check():

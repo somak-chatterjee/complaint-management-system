@@ -1,3 +1,4 @@
+import { API_BASE } from '../../config';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FileDropzone from '../../components/FileDropzone';
@@ -9,9 +10,12 @@ export default function AIAssistantPanel() {
   const { uploadedFileName, extractionProgress, extractionStatus, messages } = useSelector(
     (state) => state.aiAssistant
   );
+  const sourceText = useSelector((state) => state.aiAssistant.sourceText);
+  const formFields = useSelector((state) => state.complaintForm.fields);
   const [showPasteBox, setShowPasteBox] = useState(false);
   const [pastedText, setPastedText] = useState('');
   const [chatInput, setChatInput] = useState('');
+  const [chatPending, setChatPending] = useState(false);
 
   const { startExtractionFromFile, startExtractionFromText } = useExtractionSocket();
 
@@ -28,11 +32,49 @@ export default function AIAssistantPanel() {
     setPastedText('');
   };
 
-  const handleChatSend = () => {
-    if (!chatInput.trim()) return;
-    dispatch(messageAdded({ role: 'user', text: chatInput }));
+  const handleChatSend = async () => {
+    const text = chatInput.trim();
+    if (!text || chatPending) return;
+
+    const lastDivider = messages.map((m) => !!m.divider).lastIndexOf(true);
+    const history = messages
+      .slice(lastDivider + 1)
+      .map((m) => ({ role: m.role, text: m.text }));
+    dispatch(messageAdded({ role: 'user', text }));
     setChatInput('');
-    // Actual assistant reply will come from the backend chat endpoint — wired later.
+    setChatPending(true);
+
+    const form = Object.fromEntries(
+      Object.entries(formFields).map(([key, field]) => [key, field.value || null])
+    );
+
+    try {
+      const response = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history, raw_text: sourceText || null, form }),
+      });
+
+      if (!response.ok) {
+        let detail = `Chat failed (${response.status})`;
+        try {
+          const body = await response.json();
+          if (typeof body.detail === 'string') detail = body.detail;
+        } catch {
+          // Keep the status-based message when the response is not JSON.
+        }
+        dispatch(messageAdded({ role: 'assistant', text: detail }));
+        return;
+      }
+
+      const data = await response.json();
+      dispatch(messageAdded({ role: 'assistant', text: data.reply }));
+    } catch (e) {
+      console.error('Chat failed:', e);
+      dispatch(messageAdded({ role: 'assistant', text: 'Could not reach the backend.' }));
+    } finally {
+      setChatPending(false);
+    }
   };
 
   return (
@@ -110,20 +152,27 @@ export default function AIAssistantPanel() {
       )}
 
       <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px' }}>
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            style={{
-              background: msg.role === 'assistant' ? '#f0f6ff' : '#f5f5f5',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              marginBottom: '8px',
-              fontSize: '13px',
-            }}
-          >
-            {msg.text}
-          </div>
-        ))}
+        {messages.map((msg, i) =>
+          msg.divider ? (
+            <div key={i} style={{ textAlign: 'center', fontSize: '11px', color: '#999', margin: '12px 0' }}>
+              — {msg.text} —
+            </div>
+          ) : (
+            <div
+              key={i}
+              style={{
+                background: msg.role === 'assistant' ? '#f0f6ff' : '#f5f5f5',
+                padding: '10px 12px',
+                borderRadius: '8px',
+                marginBottom: '8px',
+                fontSize: '13px',
+              }}
+            >
+              {msg.text}
+            </div>
+          )
+        )}
+        {chatPending && <div style={{ fontSize: '12px', color: '#999' }}>Assistant is thinking...</div>}
       </div>
 
       <div style={{ display: 'flex', gap: '8px' }}>
@@ -141,6 +190,9 @@ export default function AIAssistantPanel() {
           Send
         </button>
       </div>
+      <p style={{ fontSize: '11px', color: '#999', textAlign: 'center', marginTop: '8px' }}>
+        AI responses may contain errors. Please verify information.
+      </p>
     </div>
   );
 }
