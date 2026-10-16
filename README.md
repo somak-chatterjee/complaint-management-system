@@ -25,6 +25,8 @@ Built as a full-stack project covering document parsing, LLM-based structured ex
 ## Release status
 
 **Current release: v1.1**, tagged `v1.1`. (v1.0 was the first prototype.)
+### Full version history: 
+[CHANGELOG.md](./CHANGELOG.md)
 
 ### What's included in v1.1
 
