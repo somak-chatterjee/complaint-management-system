@@ -1,0 +1,57 @@
+name: Bug
+description: Something that should work but does not
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Small, self-contained fixes are merged into `development` with `git merge --no-ff` from a `fix/` branch. If the fix needs a database migration, a new environment variable, or changes across several layers, use the Feature form instead.
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Paste the messy complaint into the paste box
+        2. Click Extract from text
+        3. Look at the Quantity affected field
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did you see it?
+      options:
+        - Local
+        - Live site (Render)
+        - Both
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console errors or backend log lines
+      description: Paste the relevant lines only, and remove any API keys.
+      render: shell
+  - type: textarea
+    id: fix
+    attributes:
+      label: Fix checklist
+      value: |
+        - [ ] Reproduced locally
+        - [ ] Fix made on a `fix/` branch
+        - [ ] Retested, including the nearby paths
+        - [ ] CHANGELOG line added

@@ -1,0 +1,57 @@
+name: Feature
+description: New behavior, a change across several files, or anything with a database migration
+title: "[Feature] "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Features are merged through a pull request into `development`. After creating the issue, add the area labels (backend, frontend, database, ai-pipeline, deployment) and the release milestone from the sidebar.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What should change, and why?
+    validations:
+      required: true
+  - type: dropdown
+    id: migration
+    attributes:
+      label: Database migration
+      description: Migrations run on every backend start against the production database, so keep them additive.
+      options:
+        - No migration needed
+        - Yes, additive only (new tables or nullable columns)
+        - Yes, changes or removes existing columns (needs a migration plan)
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: todo
+    attributes:
+      label: To do
+      description: Replace the placeholder items and delete the sections that do not apply.
+      value: |
+        ### Decisions (before coding)
+        - [ ] (replace with a decision to make)
+
+        ### Backend and database
+        - [ ] (replace with a task)
+
+        ### Frontend
+        - [ ] (replace with a task)
+
+        ### Testing
+        - [ ] Works locally against a local database
+        - [ ] Existing flows still work (extract, chat, save)
+
+        ### Release
+        - [ ] Deploy order decided (backend first if the change is backward compatible)
+        - [ ] README and CHANGELOG updated
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of scope
+      description: What this issue deliberately does not cover.
